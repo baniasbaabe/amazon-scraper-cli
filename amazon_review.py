@@ -1,11 +1,12 @@
 import json
 import logging
 
+from logger_ import logger
+
 from playwright.sync_api import sync_playwright
 from tqdm import tqdm
 from tqdm.contrib.logging import logging_redirect_tqdm
 
-logger = logging.getLogger(__name__)
 
 
 class AmazonReviews:
@@ -25,7 +26,8 @@ class AmazonReviews:
     def parse(self):
         total = []
         with logging_redirect_tqdm():
-            for page_num in tqdm(range(1, self.max_pages)):
+            for page_num in range(1, self.max_pages):
+                logger.info(f"Page {page_num} of {self.max_pages}.")
                 with sync_playwright() as p:
                     browser = p.chromium.launch(headless=True)
                     page = browser.new_page()
